@@ -10,6 +10,10 @@ android {
         }
     }
 
+    buildFeatures{ //Enable viewBinding
+        viewBinding = true
+    }
+
     defaultConfig {
         applicationId = "com.example.androidweather"
         minSdk = 24

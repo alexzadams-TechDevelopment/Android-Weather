@@ -1,3 +1,9 @@
 <resources>
     <string name="app_name">Android Weather</string>
+    <string name="city">[City]</string>
+    <string name="search">Search</string>
+    <string name="enter_city_name">Enter City Name</string>
+    <string name="humidity">Humidity</string>
+    <string name="wind">Wind</string>
+    <string name="weather">[Weather]</string>
 </resources>

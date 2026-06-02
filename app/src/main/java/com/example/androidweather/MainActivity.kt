@@ -1,6 +1,7 @@
 package com.example.androidweather
 
 import android.os.Bundle
+import android.view.View
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
@@ -31,6 +32,7 @@ class MainActivity : AppCompatActivity() {
             val result = withContext(Dispatchers.IO) { //Runs a thread for an input/output call for API data.
                 //searches with the URL provided.                                  (readText(Charsets.UTF_8) is used so different text characters are recognised while making this request.
                 URL("https://api.openweathermap.org/data/2.5/weather?q=$location&units=metric&appid=$APIkey").readText(Charsets.UTF_8)
+
             }
                 onPostExecute(result)
 
@@ -38,12 +40,15 @@ class MainActivity : AppCompatActivity() {
         catch (e: Exception){
             e.printStackTrace() //For if the API request fails to connect.
             //todo:: Implement feature to notify users in app when this happens (For example: When theres no internet.)
+            inputDisplay(false)
+            //println("Could not find Location, Check internet and if the search is correct")
         }
 
         }
     }
 
     fun onPostExecute(result: String?){
+        inputDisplay(true)
 
         try{
             val jsonObj = JSONObject(result)
@@ -54,6 +59,8 @@ class MainActivity : AppCompatActivity() {
             val wind = jsonObj.getJSONObject("wind")
 
             val weatherStatus = weather.getString("description")
+            binding.cityText.text = location //Updates the location name in a suitable time
+
             binding.weatherText.text = weatherStatus
             binding.tempText.text = "$temp °C"
 
@@ -63,6 +70,30 @@ class MainActivity : AppCompatActivity() {
         }
         catch (e: Exception){
             e.printStackTrace() //sort later
+        }
+    }
+
+    //Changes the app GUI when theres an incorrect input or connection issue.
+    private fun inputDisplay(active: Boolean){
+
+        when(active){
+            true -> {
+                binding.cityText.text = "..."
+                binding.humidityText.visibility = View.VISIBLE
+                binding.humidityLabel.visibility = View.VISIBLE
+                binding.windText.visibility = View.VISIBLE
+                binding.windLabel.visibility = View.VISIBLE
+            }
+            false -> {
+                binding.cityText.text = "Invalid Location"
+                binding.weatherText.text = "Location not found or No Connection."
+                binding.tempText.text = "Please try again!"
+
+                binding.humidityText.visibility = View.INVISIBLE
+                binding.humidityLabel.visibility = View.INVISIBLE
+                binding.windText.visibility = View.INVISIBLE
+                binding.windLabel.visibility = View.INVISIBLE
+            }
         }
     }
 
@@ -76,13 +107,16 @@ class MainActivity : AppCompatActivity() {
         setContentView(view)
 
         
-        binding.cityText.text = location
+        binding.cityText.text = location //Loads default location
         getWeatherData()
+
 
 
         //Searches the city when the user enters the name.
         binding.btnSearch.setOnClickListener {
-            //TODO:: implement search feature.
+            location = binding.cityInput.text.toString() +", $countryCode"
+            binding.cityText.text = location
+            getWeatherData()
         }
 
 

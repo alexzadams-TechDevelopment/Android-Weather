@@ -18,11 +18,11 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
     private val APIkey: String = "b57f2441e36a0d4d23953cadfbfe78c9"
-
     private var city: String = "London"
     private var countryCode: String = "UK"
-
     private var location: String = "$city, $countryCode"
+
+
 
 
     //Used to call the API and get the weather data using the city name and & API key
@@ -57,6 +57,8 @@ class MainActivity : AppCompatActivity() {
             val temp = main.getString("temp")
             val humidity = main.getString("humidity")
             val wind = jsonObj.getJSONObject("wind")
+            val icon = weather.getString("icon")
+
 
             val weatherStatus = weather.getString("description")
             binding.cityText.text = location //Updates the location name in a suitable time
@@ -67,15 +69,47 @@ class MainActivity : AppCompatActivity() {
             val windString = wind.getString("speed")
             binding.windText.text = "$windString m/s"
             binding.humidityText.text = humidity
+
+            //Updates the image on display
+            val weatherIcon = when(icon){ //TODO:: Replace the current images with my own design (current is from open weather AI as a place holder)
+                //Day
+                "01d" -> R.drawable.d01
+                "02d" -> R.drawable.d02
+                "03d" -> R.drawable.d03
+                "04d" -> R.drawable.d04
+                "09d" -> R.drawable.d09
+                "10d" -> R.drawable.d10
+                "11d" -> R.drawable.d11
+                "13d" -> R.drawable.d13
+                "50d" -> R.drawable.d50
+
+                //Night
+                "01n" -> R.drawable.n01
+                "02n" -> R.drawable.n02
+                "03n" -> R.drawable.n03
+                "04n" -> R.drawable.n04
+                "09n" -> R.drawable.n09
+                "10n" -> R.drawable.n10
+                "11n" -> R.drawable.n11
+                "13n" -> R.drawable.n13
+                "50n" -> R.drawable.n50
+
+                else -> R.drawable.unknown
+            }
+
+
+
+            binding.weatherImageView.setImageResource(weatherIcon)
+
+
         }
         catch (e: Exception){
             e.printStackTrace() //sort later
         }
     }
 
-    //Changes the app GUI when theres an incorrect input or connection issue.
+    //Changes the app GUI when there's an incorrect input or connection issue.
     private fun inputDisplay(active: Boolean){
-
         when(active){
             true -> {
                 binding.cityText.text = "..."
@@ -84,6 +118,8 @@ class MainActivity : AppCompatActivity() {
                 binding.windText.visibility = View.VISIBLE
                 binding.windLabel.visibility = View.VISIBLE
             }
+
+
             false -> {
                 binding.cityText.text = "Invalid Location"
                 binding.weatherText.text = "Location not found or No Connection."
@@ -93,6 +129,10 @@ class MainActivity : AppCompatActivity() {
                 binding.humidityLabel.visibility = View.INVISIBLE
                 binding.windText.visibility = View.INVISIBLE
                 binding.windLabel.visibility = View.INVISIBLE
+
+                //changes image to be unknown
+                val unknowIcon = R.drawable.unknown
+                binding.weatherImageView.setImageResource(unknowIcon)
             }
         }
     }
@@ -111,15 +151,11 @@ class MainActivity : AppCompatActivity() {
         getWeatherData()
 
 
-
         //Searches the city when the user enters the name.
         binding.btnSearch.setOnClickListener {
             location = binding.cityInput.text.toString() +", $countryCode"
             binding.cityText.text = location
             getWeatherData()
         }
-
-
-
     }
 }

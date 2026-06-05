@@ -1,7 +1,10 @@
 package com.example.androidweather
 
 import android.os.Bundle
+import android.util.Log
 import android.view.View
+import android.view.ViewParent
+import android.widget.ArrayAdapter
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
@@ -13,6 +16,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.json.JSONObject
 import java.net.URL
+import android.widget.AdapterView
 
 class MainActivity : AppCompatActivity() {
 
@@ -21,6 +25,9 @@ class MainActivity : AppCompatActivity() {
     private var city: String = "London"
     private var countryCode: String = "UK"
     private var location: String = "$city, $countryCode"
+
+
+
 
 
 
@@ -96,9 +103,6 @@ class MainActivity : AppCompatActivity() {
 
                 else -> R.drawable.unknown
             }
-
-
-
             binding.weatherImageView.setImageResource(weatherIcon)
 
 
@@ -138,7 +142,6 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
-
         //Standard start up onCreate code.
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -149,6 +152,50 @@ class MainActivity : AppCompatActivity() {
         
         binding.cityText.text = location //Loads default location
         getWeatherData()
+
+
+        //List of countries for the Spinner
+        val countries = listOf(
+            Country("United Kingdom", "UK"),
+            Country("United States", "US"),
+            Country("France", "FR"),
+            Country("Germany", "DE")
+        )
+
+        val adapter = ArrayAdapter(
+            this,
+            android.R.layout.simple_spinner_item,
+            countries
+        )
+
+        adapter.setDropDownViewResource(
+            android.R.layout.simple_spinner_dropdown_item
+        )
+
+        binding.countrySpinner.adapter = adapter
+
+        binding.countrySpinner.onItemSelectedListener =
+            object : AdapterView.OnItemSelectedListener {
+
+                override fun onItemSelected(
+                    parent: AdapterView<*>?,
+                    view: View?,
+                    position: Int,
+                    id: Long
+                ) {
+                    val selectedCountry = //sort later
+                        parent?.getItemAtPosition(position) as Country
+
+                    val countryCodeSpinner = selectedCountry.code //sort later
+
+                    countryCode = countryCodeSpinner
+                    println(countryCodeSpinner)
+                    Log.d("Country", countryCodeSpinner)
+                }
+
+                override fun onNothingSelected(parent: AdapterView<*>?) {}
+            }
+
 
 
         //Searches the city when the user enters the name.

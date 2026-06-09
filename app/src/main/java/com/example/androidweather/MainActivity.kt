@@ -1,5 +1,8 @@
 package com.example.androidweather
 
+import android.Manifest
+import android.content.pm.PackageManager
+import android.location.Geocoder
 import android.os.Bundle
 import android.util.Log
 import android.view.View
@@ -17,6 +20,13 @@ import kotlinx.coroutines.withContext
 import org.json.JSONObject
 import java.net.URL
 import android.widget.AdapterView
+import androidx.annotation.RequiresPermission
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
+import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.android.gms.location.LocationServices
+import java.io.IOException
+import java.util.Locale
 
 class MainActivity : AppCompatActivity() {
 
@@ -27,8 +37,8 @@ class MainActivity : AppCompatActivity() {
     private var location: String = "$city, $countryCode"
 
 
-
-
+    //For user location
+    private lateinit var fusedLocationClient: FusedLocationProviderClient
 
 
 
@@ -149,19 +159,22 @@ class MainActivity : AppCompatActivity() {
         val view = binding.root
         setContentView(view)
 
-        
+
         binding.cityText.text = location //Loads default location
         getWeatherData()
 
 
-        //List of countries for the Spinner
-        val countries = listOf(
-            Country("United Kingdom", "UK"),
-            Country("United States", "US"),
-            Country("France", "FR"),
-            Country("Germany", "DE")
-        )
 
+        val countries = Locale.getISOCountries().map{
+            countryCode -> val locale = Locale("", countryCode)
+
+            Country(
+                countryName = locale.displayCountry,
+                code = countryCode
+            )
+        }.sortedBy { it.countryName }
+
+        //Spinner Set up//
         val adapter = ArrayAdapter(
             this,
             android.R.layout.simple_spinner_item,
@@ -173,6 +186,8 @@ class MainActivity : AppCompatActivity() {
         )
 
         binding.countrySpinner.adapter = adapter
+
+        //Spinner Set up//
 
         binding.countrySpinner.onItemSelectedListener =
             object : AdapterView.OnItemSelectedListener {
@@ -205,4 +220,5 @@ class MainActivity : AppCompatActivity() {
             getWeatherData()
         }
     }
+
 }

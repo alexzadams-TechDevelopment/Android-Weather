@@ -1,17 +1,11 @@
 package com.example.androidweather
 
-import android.Manifest
-import android.content.pm.PackageManager
-import android.location.Geocoder
 import android.os.Bundle
 import android.util.Log
 import android.view.View
-import android.view.ViewParent
 import android.widget.ArrayAdapter
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.lifecycleScope
 import com.example.androidweather.databinding.ActivityMainBinding
 import kotlinx.coroutines.Dispatchers
@@ -20,13 +14,11 @@ import kotlinx.coroutines.withContext
 import org.json.JSONObject
 import java.net.URL
 import android.widget.AdapterView
-import androidx.annotation.RequiresPermission
-import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat
+import android.widget.VideoView
 import com.google.android.gms.location.FusedLocationProviderClient
-import com.google.android.gms.location.LocationServices
-import java.io.IOException
 import java.util.Locale
+import android.net.Uri
+
 
 class MainActivity : AppCompatActivity() {
 
@@ -76,6 +68,8 @@ class MainActivity : AppCompatActivity() {
             val wind = jsonObj.getJSONObject("wind")
             val icon = weather.getString("icon")
 
+            //video TODO:: Edit the videos within the raw file to have reduced quality to run better/smoothly on the android device.
+            var weatherMedia = R.raw.sun_cloudy_day //Used to store the weather status from OpenWeather API JSON (Sun_day being a placeholder)
 
             val weatherStatus = weather.getString("description")
             binding.cityText.text = location //Updates the location name in a suitable time
@@ -90,32 +84,40 @@ class MainActivity : AppCompatActivity() {
             //Updates the image on display
             val weatherIcon = when(icon){ //TODO:: Replace the current images with my own design (current is from open weather AI as a place holder)
                 //Day
-                "01d" -> R.drawable.d01
-                "02d" -> R.drawable.d02
-                "03d" -> R.drawable.d03
-                "04d" -> R.drawable.d04
-                "09d" -> R.drawable.d09
-                "10d" -> R.drawable.d10
-                "11d" -> R.drawable.d11
-                "13d" -> R.drawable.d13
-                "50d" -> R.drawable.d50
+                "01d" -> {weatherMedia = R.raw.sun_day; R.drawable.d01}
+                "02d" -> {weatherMedia = R.raw.sun_cloudy_day; R.drawable.d02}
+                "03d" -> {weatherMedia = R.raw.cloudy_day; R.drawable.d03}
+                "04d" -> {weatherMedia = R.raw.cloudy_day; R.drawable.d04}
+                "09d" -> {weatherMedia = R.raw.rain_day; R.drawable.d09}
+                "10d" -> {weatherMedia = R.raw.cloudy_day; R.drawable.d10} //update to more suitable video
+                "11d" -> {weatherMedia = R.raw.thunder_day; R.drawable.d11}
+                "13d" -> {weatherMedia = R.raw.snow_day; R.drawable.d13}
+                "50d" -> {weatherMedia = R.raw.fog_day; R.drawable.d50}
 
                 //Night
-                "01n" -> R.drawable.n01
-                "02n" -> R.drawable.n02
-                "03n" -> R.drawable.n03
-                "04n" -> R.drawable.n04
-                "09n" -> R.drawable.n09
-                "10n" -> R.drawable.n10
-                "11n" -> R.drawable.n11
-                "13n" -> R.drawable.n13
-                "50n" -> R.drawable.n50
+                "01n" -> {weatherMedia = R.raw.night; R.drawable.n01}
+                "02n" -> {weatherMedia = R.raw.cloudy_night; R.drawable.n02}
+                "03n" -> {weatherMedia = R.raw.cloudy_night; R.drawable.n03}
+                "04n" -> {weatherMedia = R.raw.cloudy_night; R.drawable.n04}
+                "09n" -> {weatherMedia = R.raw.rain_night; R.drawable.n09}
+                "10n" -> {weatherMedia = R.raw.cloudy_night; R.drawable.n10}
+                "11n" -> {weatherMedia = R.raw.thunder_night; R.drawable.n11}
+                "13n" -> {weatherMedia = R.raw.snow_night; R.drawable.n13}
+                "50n" -> {weatherMedia = R.raw.cloudy_night; R.drawable.n50} //update to more suitable video
 
-                else -> R.drawable.unknown
+                else -> {R.drawable.unknown; R.raw.sun_cloudy_day}
             }
             binding.weatherImageView.setImageResource(weatherIcon)
 
+            //Play video
+            val video = findViewById<VideoView>(R.id.videoBackground) //Selects the videoView entity in the activity file.
+            video.setVideoURI(Uri.parse("android.resource://$packageName/$weatherMedia")) //uses weatherMedia to select the required weather condition to play the video.
 
+            //To play and loop the video in the background
+            video.setOnPreparedListener {
+                it.isLooping = true
+                video.start()
+            }
         }
         catch (e: Exception){
             e.printStackTrace() //sort later
@@ -132,7 +134,6 @@ class MainActivity : AppCompatActivity() {
                 binding.windText.visibility = View.VISIBLE
                 binding.windLabel.visibility = View.VISIBLE
             }
-
 
             false -> {
                 binding.cityText.text = "Invalid Location"
@@ -159,11 +160,8 @@ class MainActivity : AppCompatActivity() {
         val view = binding.root
         setContentView(view)
 
-
         binding.cityText.text = location //Loads default location
         getWeatherData()
-
-
 
         val countries = Locale.getISOCountries().map{
             countryCode -> val locale = Locale("", countryCode)
@@ -188,7 +186,6 @@ class MainActivity : AppCompatActivity() {
         binding.countrySpinner.adapter = adapter
 
         //Spinner Set up//
-
         binding.countrySpinner.onItemSelectedListener =
             object : AdapterView.OnItemSelectedListener {
 
@@ -207,7 +204,6 @@ class MainActivity : AppCompatActivity() {
                     println(countryCodeSpinner)
                     Log.d("Country", countryCodeSpinner)
                 }
-
                 override fun onNothingSelected(parent: AdapterView<*>?) {}
             }
 
@@ -215,9 +211,29 @@ class MainActivity : AppCompatActivity() {
 
         //Searches the city when the user enters the name.
         binding.btnSearch.setOnClickListener {
-            location = binding.cityInput.text.toString() +", $countryCode"
-            binding.cityText.text = location
-            getWeatherData()
+            if(binding.cityInput.text.toString() == ""){
+                //binding.cityInput.hint = "Please Enter a city here!"
+                //binding.cityInput.setHintTextColor(Color.RED) todo: Change to an ideal color or remove
+
+                //This is added to present an animated display to the user that the textInput is empty
+                binding.cityInput.animate()
+                    .translationX(20f)
+                    .setDuration(50)
+                    .withEndAction {
+                        binding.cityInput.animate()
+                            .translationX(-20f)
+                            .setDuration(50)
+                            .withEndAction {
+                                binding.cityInput.animate()
+                                    .translationX(0f)
+                                    .setDuration(50)
+                            }
+                    }
+            } else{ //For when the user inputs text in cityInput.
+                location = binding.cityInput.text.toString() +", $countryCode"
+                binding.cityText.text = location
+                getWeatherData()
+            }
         }
     }
 

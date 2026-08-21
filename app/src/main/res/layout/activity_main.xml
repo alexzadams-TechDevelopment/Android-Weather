@@ -5,17 +5,48 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#9CEEFF"
+    android:background="#300C4F"
     tools:context=".MainActivity">
+
 
     <VideoView
         android:id="@+id/videoBackground"
-        android:layout_width="match_parent"
-        android:layout_height="550dp"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="24dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHeight_percent="0.75"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:resize_mode="zoom"
         app:use_controller="false" />
 
+    <View
+        android:id="@+id/fade"
+        android:layout_width="0dp"
+        android:layout_height="120dp"
+        android:background="@drawable/fade"
+        app:layout_constraintBottom_toBottomOf="@id/videoBackground"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+
+    <LinearLayout
+        android:id="@+id/infoBox"
+        android:layout_width="358dp"
+        android:layout_height="400dp"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="36dp"
+        android:layout_marginEnd="24dp"
+        android:background="@drawable/info_box"
+        android:orientation="vertical"
+        android:padding="20dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.111"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+    </LinearLayout>
 
     <TextView
         android:id="@+id/cityText"
@@ -23,6 +54,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="56dp"
         android:text="@string/city"
+        android:textColor="#B4B4B4"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
@@ -37,6 +69,21 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/cityText"
         app:srcCompat="@drawable/d03" />
+
+
+    <LinearLayout
+        android:id="@+id/infoBox2"
+        android:layout_width="0dp"
+        android:layout_height="245dp"
+        android:background="@drawable/info_box2"
+        android:orientation="vertical"
+        android:padding="20dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+    </LinearLayout>
+
 
     <Button
         android:id="@+id/btnSearch"
@@ -56,6 +103,8 @@
         android:ems="10"
         android:hint="@string/enter_city_name"
         android:inputType="text"
+        android:textColor="#B4B4B4"
+        android:textColorHint="#B4B4B4"
         app:layout_constraintBottom_toTopOf="@+id/btnSearch"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
@@ -64,8 +113,9 @@
         android:id="@+id/humidityLabel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="392dp"
+        android:layout_marginTop="325dp"
         android:text="@string/humidity"
+        android:textColor="#B4B4B4"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.259"
         app:layout_constraintStart_toStartOf="parent"
@@ -77,6 +127,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="32dp"
         android:text="00"
+        android:textColor="#B4B4B4"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.688"
         app:layout_constraintStart_toStartOf="parent"
@@ -88,6 +139,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="32dp"
         android:text="00"
+        android:textColor="#B4B4B4"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.232"
         app:layout_constraintStart_toStartOf="parent"
@@ -97,8 +149,9 @@
         android:id="@+id/windLabel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="392dp"
+        android:layout_marginTop="325dp"
         android:text="@string/wind"
+        android:textColor="#B4B4B4"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.717"
         app:layout_constraintStart_toStartOf="parent"
@@ -108,8 +161,9 @@
         android:id="@+id/weatherText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="40dp"
+        android:layout_marginTop="10dp"
         android:text="@string/weather"
+        android:textColor="#B4B4B4"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
@@ -121,6 +175,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:text="00°"
+        android:textColor="#B4B4B4"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/weatherText" />
@@ -129,6 +184,8 @@
         android:id="@+id/countrySpinner"
         android:layout_width="227dp"
         android:layout_height="52dp"
+        android:textColor="#B4B4B4"
+        android:textColorHint="#B4B4B4"
         app:layout_constraintBottom_toTopOf="@+id/btnSearch"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

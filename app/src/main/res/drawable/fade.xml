@@ -2,7 +2,7 @@
 <shape xmlns:android="http://schemas.android.com/apk/res/android"
     android:shape="rectangle">
 
-    <!-- Fade is used for for the video display below. -->
+    <!-- Fade is used for the video display below. -->
 
     <gradient
         android:angle="90"

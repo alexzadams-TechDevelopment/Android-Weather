@@ -3,7 +3,7 @@
 <!-- To create a box for the activity_main so data can be stored within while remaining transparent.-->
 <shape xmlns:android="http://schemas.android.com/apk/res/android" android:shape="rectangle">
 
-    <solid android:color="#300C4F" />
+    <solid android:color="#7731B5" />
 
     <corners
         android:topLeftRadius="20dp"

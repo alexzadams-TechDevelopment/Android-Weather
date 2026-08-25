@@ -6,4 +6,6 @@
     <string name="humidity">Humidity</string>
     <string name="wind">Wind</string>
     <string name="weather">[Weather]</string>
+    <string name="chance_of_rain">Chance of Rain</string>
+    <string name="feels_like">Feels Like</string>
 </resources>

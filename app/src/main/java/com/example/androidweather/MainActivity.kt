@@ -70,6 +70,10 @@ class MainActivity : AppCompatActivity() {
             val humidity = main.getString("humidity")
             val wind = jsonObj.getJSONObject("wind")
             val icon = weather.getString("icon")
+            val feelLike = main.getDouble("feels_like")
+
+
+
 
             //video TODO:: Edit the videos within the raw file to have reduced quality to run better/smoothly on the android device.
             var weatherMedia = R.raw.sun_cloudy_day //Used to store the weather status from OpenWeather API JSON (Sun_day being a placeholder)
@@ -78,11 +82,13 @@ class MainActivity : AppCompatActivity() {
             binding.cityText.text = location //Updates the location name in a suitable time
 
             binding.weatherText.text = weatherStatus
-            binding.tempText.text = "$temp °C"
+            binding.tempText.text = "$temp °C" //Temperature
+
+            binding.feelText.text = "$feelLike °C" //Feels Temperature
 
             val windString = wind.getString("speed")
-            binding.windText.text = "$windString m/s"
-            binding.humidityText.text = humidity
+            binding.windText.text = "$windString m/s" //Wind Speed
+            binding.humidityText.text = "$humidity%" //Humidity
 
             var dayTime: Boolean = true // To declare if the area searched is day or not using the switch statement below.
 
@@ -143,16 +149,25 @@ class MainActivity : AppCompatActivity() {
 
         if(dayTime){ //Day Time (blue)
             binding.root.setBackgroundColor(Color.parseColor("#41B1E0"))
-            backgroundBox.setColor(Color.parseColor("#41b1e0"))
-            backgroundFade.colors = intArrayOf(Color.parseColor("#41b1e0"), Color.TRANSPARENT)
 
-            binding.btnSearch.setBackgroundColor(Color.parseColor("#28718F"))
+
+
+
+            backgroundFade.colors = intArrayOf(Color.parseColor("#41b1e0"), Color.TRANSPARENT)
+            backgroundBox.colors = intArrayOf(Color.parseColor("#236078"), Color.parseColor("#41b1e0"))
+
+            binding.btnSearch.setBackgroundColor(Color.parseColor("#1D5169"))
             binding.btnSearch.setTextColor(Color.WHITE)
 
 
         }else{ //Night Time (purple)
             binding.root.setBackgroundColor(Color.parseColor("#7731B5"))
-            backgroundBox.setColor(Color.parseColor("#7731B5"))
+
+
+            backgroundBox.colors = intArrayOf(Color.parseColor("#4B1F73"), Color.parseColor("#8A36D6"))
+
+
+
             backgroundFade.colors = intArrayOf(Color.parseColor("#7731B5"), Color.TRANSPARENT)
 
             binding.btnSearch.setBackgroundColor(Color.parseColor("#2F154A"))
@@ -169,6 +184,9 @@ class MainActivity : AppCompatActivity() {
                 binding.humidityLabel.visibility = View.VISIBLE
                 binding.windText.visibility = View.VISIBLE
                 binding.windLabel.visibility = View.VISIBLE
+                binding.feelText.visibility = View.VISIBLE
+                binding.feelLabel.visibility = View.VISIBLE
+
             }
 
             false -> {
@@ -180,6 +198,8 @@ class MainActivity : AppCompatActivity() {
                 binding.humidityLabel.visibility = View.INVISIBLE
                 binding.windText.visibility = View.INVISIBLE
                 binding.windLabel.visibility = View.INVISIBLE
+                binding.feelText.visibility = View.INVISIBLE
+                binding.feelLabel.visibility = View.INVISIBLE
 
                 //changes image to be unknown
                 val unknowIcon = R.drawable.unknown

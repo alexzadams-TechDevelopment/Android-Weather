@@ -34,7 +34,7 @@
     <LinearLayout
         android:id="@+id/infoBox"
         android:layout_width="358dp"
-        android:layout_height="400dp"
+        android:layout_height="350dp"
         android:layout_marginStart="24dp"
         android:layout_marginTop="36dp"
         android:layout_marginEnd="24dp"
@@ -42,7 +42,7 @@
         android:orientation="vertical"
         android:padding="20dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.111"
+        app:layout_constraintHorizontal_bias="0.4"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
@@ -55,6 +55,7 @@
         android:layout_marginTop="56dp"
         android:text="@string/city"
         android:textColor="#B4B4B4"
+        android:textSize="32sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
@@ -64,7 +65,6 @@
         android:id="@+id/weatherImageView"
         android:layout_width="103dp"
         android:layout_height="106dp"
-        android:layout_marginTop="36dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/cityText"
@@ -115,57 +115,92 @@
         android:id="@+id/humidityLabel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="325dp"
+        android:layout_marginLeft="5pt"
+        android:layout_marginRight="10pt"
+        android:layout_marginBottom="15pt"
         android:text="@string/humidity"
         android:textColor="#B4B4B4"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.259"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:textSize="16sp"
+        app:layout_constraintBottom_toBottomOf="@+id/infoBox"
+        app:layout_constraintEnd_toStartOf="@+id/feelLabel"
+        app:layout_constraintStart_toStartOf="@+id/infoBox"
+        app:layout_constraintTop_toBottomOf="@+id/tempText" />
 
     <TextView
         android:id="@+id/windText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
+        android:layout_marginBottom="15pt"
         android:text="00"
         android:textColor="#B4B4B4"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.688"
-        app:layout_constraintStart_toStartOf="parent"
+        android:textSize="14sp"
+        app:layout_constraintBottom_toBottomOf="@+id/infoBox"
+        app:layout_constraintEnd_toEndOf="@+id/windLabel"
+        app:layout_constraintStart_toStartOf="@+id/windLabel"
         app:layout_constraintTop_toBottomOf="@+id/windLabel" />
 
     <TextView
         android:id="@+id/humidityText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
+        android:layout_marginBottom="15pt"
         android:text="00"
         android:textColor="#B4B4B4"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.232"
-        app:layout_constraintStart_toStartOf="parent"
+        android:textSize="14sp"
+        app:layout_constraintBottom_toBottomOf="@+id/infoBox"
+        app:layout_constraintEnd_toEndOf="@+id/humidityLabel"
+        app:layout_constraintStart_toStartOf="@+id/humidityLabel"
         app:layout_constraintTop_toBottomOf="@+id/humidityLabel" />
 
     <TextView
         android:id="@+id/windLabel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="325dp"
+        android:layout_marginLeft="10pt"
+        android:layout_marginRight="5pt"
+        android:layout_marginBottom="15pt"
         android:text="@string/wind"
         android:textColor="#B4B4B4"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.717"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:textSize="16sp"
+        app:layout_constraintBottom_toBottomOf="@+id/infoBox"
+        app:layout_constraintEnd_toEndOf="@+id/infoBox"
+        app:layout_constraintStart_toEndOf="@+id/feelLabel"
+        app:layout_constraintTop_toBottomOf="@+id/tempText" />
+
+
+    <TextView
+        android:id="@+id/feelLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="15pt"
+        android:text="Feels Like"
+        android:textColor="#B4B4B4"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toBottomOf="@+id/infoBox"
+        app:layout_constraintEnd_toEndOf="@+id/tempText"
+        app:layout_constraintStart_toStartOf="@+id/tempText"
+        app:layout_constraintTop_toBottomOf="@+id/tempText" />
+
+    <TextView
+        android:id="@+id/feelText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="15pt"
+        android:text="00"
+        android:textColor="#B4B4B4"
+        android:textSize="14sp"
+        app:layout_constraintBottom_toBottomOf="@+id/infoBox"
+        app:layout_constraintEnd_toEndOf="@+id/feelLabel"
+        app:layout_constraintStart_toStartOf="@+id/feelLabel"
+        app:layout_constraintTop_toBottomOf="@+id/feelLabel" />
 
     <TextView
         android:id="@+id/weatherText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
         android:text="@string/weather"
         android:textColor="#B4B4B4"
+        android:textSize="20sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
@@ -175,9 +210,10 @@
         android:id="@+id/tempText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="10dp"
         android:text="00°"
         android:textColor="#B4B4B4"
+        android:textSize="20sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/weatherText" />

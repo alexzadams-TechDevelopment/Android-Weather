@@ -1,6 +1,6 @@
 package com.example.androidweather
 
-import android.content.res.ColorStateList
+
 import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
@@ -17,7 +17,7 @@ import org.json.JSONObject
 import java.net.URL
 import android.widget.AdapterView
 import android.widget.VideoView
-import com.google.android.gms.location.FusedLocationProviderClient
+//import com.google.android.gms.location.FusedLocationProviderClient
 import java.util.Locale
 import android.net.Uri
 import android.graphics.drawable.GradientDrawable
@@ -32,8 +32,8 @@ class MainActivity : AppCompatActivity() {
     private var location: String = "$city, $countryCode"
 
 
-    //For user location
-    private lateinit var fusedLocationClient: FusedLocationProviderClient
+    //For user location (remove if not used on completion)
+    //private late init var fusedLocationClient: FusedLocationProviderClient
 
 
 
@@ -90,7 +90,7 @@ class MainActivity : AppCompatActivity() {
             binding.windText.text = "$windString m/s" //Wind Speed
             binding.humidityText.text = "$humidity%" //Humidity
 
-            var dayTime: Boolean = true // To declare if the area searched is day or not using the switch statement below.
+            var dayTime = true // To declare if the area searched is day or not using the switch statement below.
 
             //Updates the image on display
             val weatherIcon = when(icon){ //TODO:: Replace the current images with my own design (current is from open weather AI as a place holder)
@@ -235,6 +235,9 @@ class MainActivity : AppCompatActivity() {
             countries
         )
 
+//        val position = countries.indexOfFirst { it.countryName == "United Kingdom" }
+//        binding.countrySpinner.setSelection(position)
+
         adapter.setDropDownViewResource(
             android.R.layout.simple_spinner_dropdown_item
         )
@@ -256,6 +259,7 @@ class MainActivity : AppCompatActivity() {
 
                     val countryCodeSpinner = selectedCountry.code //sort later
 
+
                     countryCode = countryCodeSpinner
                     println(countryCodeSpinner)
                     Log.d("Country", countryCodeSpinner)
@@ -263,13 +267,14 @@ class MainActivity : AppCompatActivity() {
                 override fun onNothingSelected(parent: AdapterView<*>?) {}
             }
 
-
+        val position = countries.indexOfFirst { it.countryName == "United Kingdom" } //Selects specific country from the items available
+        binding.countrySpinner.setSelection(position) //Sets the country provided to appear first in spinner on create.
 
         //Searches the city when the user enters the name.
         binding.btnSearch.setOnClickListener {
             if(binding.cityInput.text.toString() == ""){
                 //binding.cityInput.hint = "Please Enter a city here!"
-                //binding.cityInput.setHintTextColor(Color.RED) todo: Change to an ideal color or remove
+                //binding.cityInput.setHintTextColor(Color.RED) //todo: Change to an ideal color or remove
 
                 //This is added to present an animated display to the user that the textInput is empty
                 binding.cityInput.animate()

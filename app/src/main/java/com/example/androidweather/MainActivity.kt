@@ -21,6 +21,8 @@ import android.widget.VideoView
 import java.util.Locale
 import android.net.Uri
 import android.graphics.drawable.GradientDrawable
+import java.io.IOException
+import java.net.UnknownHostException
 
 
 class MainActivity : AppCompatActivity() {
@@ -38,7 +40,7 @@ class MainActivity : AppCompatActivity() {
 
 
     //Used to call the API and get the weather data using the city name and & API key
-    private fun getWeatherData(){
+    private fun getWeatherData(){ //Delete note later: consider returning a string
         lifecycleScope.launch { //Creates a coroutin while app makes request for weather data
             try{
             val result = withContext(Dispatchers.IO) { //Runs a thread for an input/output call for API data.
@@ -49,13 +51,23 @@ class MainActivity : AppCompatActivity() {
                 onPostExecute(result)
 
         }
-        catch (e: Exception){
-            e.printStackTrace() //For if the API request fails to connect.
-            //todo:: Implement feature to notify users in app when this happens (For example: When theres no internet.)
-            inputDisplay(false)
-            //println("Could not find Location, Check internet and if the search is correct")
-        }
+            catch (e: UnknownHostException){
+                e.printStackTrace() //For when there's no internet.
+                inputDisplay(false)
+                binding.weatherText.text = "Could not connect to internet."
+             }
 
+            catch (e: IOException){
+                e.printStackTrace() //For any failure to make a call to OpenWeather API.
+                inputDisplay(false)
+                binding.weatherText.text = "Could not connect to OpenWeather."
+            }
+
+            catch (e: Exception){
+                e.printStackTrace() //For any additional reasons for connection failure.
+                inputDisplay(false)
+                binding.weatherText.text = "Unexpected error has occurred."
+            }
         }
     }
 
@@ -189,11 +201,10 @@ class MainActivity : AppCompatActivity() {
 
             }
 
-            false -> {
+            false -> { //Returns false if the location is non-existent or if there's a caught api fail.
                 binding.cityText.text = "Invalid Location"
-                binding.weatherText.text = "Location not found or No Connection."
+                //binding.weatherText.text = "Location not found or No Connection." //delete later
                 binding.tempText.text = "Please try again!"
-
                 binding.humidityText.visibility = View.INVISIBLE
                 binding.humidityLabel.visibility = View.INVISIBLE
                 binding.windText.visibility = View.INVISIBLE

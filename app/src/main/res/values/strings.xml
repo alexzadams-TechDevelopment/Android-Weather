@@ -8,4 +8,10 @@
     <string name="weather">[Weather]</string>
     <string name="chance_of_rain">Chance of Rain</string>
     <string name="feels_like">Feels Like</string>
+    <string name="to_present_a_image_element_of_what_the_weather_is">To present a image element of what the weather is.</string>
+    <string name="feelTempTxt">00</string>
+    <string name="tempTxt">00°</string>
+    <string name="windTxt">00</string>
+    <string name="humidityTxt">00</string>
+    <string name="feel_like">Feels Like</string>
 </resources>

@@ -159,63 +159,89 @@ class MainActivity : AppCompatActivity() {
         val backgroundBox = binding.infoBox2.background.mutate() as GradientDrawable
         val backgroundFade = binding.fade.background.mutate() as GradientDrawable
 
+        val circles = listOf(
+            binding.infoCircle1,
+            binding.infoCircle2,
+            binding.infoCircle3
+        )
+
+
+
         if(dayTime){ //Day Time (blue)
-            binding.root.setBackgroundColor(Color.parseColor("#41B1E0"))
+            //binding.root.setBackgroundColor(Color.parseColor("#41B1E0"))
 
 
+            binding.root.background = GradientDrawable(
+                GradientDrawable.Orientation.LEFT_RIGHT,
+                intArrayOf(
+                    Color.parseColor("#236078"),
+                    Color.parseColor("#41B1E0"),
+                    Color.parseColor("#236078")
+                )
+            )
 
 
             backgroundFade.colors = intArrayOf(Color.parseColor("#41b1e0"), Color.TRANSPARENT)
             backgroundBox.colors = intArrayOf(Color.parseColor("#236078"), Color.parseColor("#41b1e0"))
+
+            circles.forEach {
+                (it.background as GradientDrawable).setStroke(2, Color.parseColor("#41B1E0"))
+            }
 
             binding.btnSearch.setBackgroundColor(Color.parseColor("#1D5169"))
             binding.btnSearch.setTextColor(Color.WHITE)
 
 
         }else{ //Night Time (purple)
-            binding.root.setBackgroundColor(Color.parseColor("#7731B5"))
+
+            binding.root.background = GradientDrawable(
+                GradientDrawable.Orientation.LEFT_RIGHT,
+                intArrayOf(
+                    Color.parseColor("#4B1F73"),
+                    Color.parseColor("#7731B5"),
+                    Color.parseColor("#4B1F73")
+                )
+            )
 
 
             backgroundBox.colors = intArrayOf(Color.parseColor("#4B1F73"), Color.parseColor("#8A36D6"))
-
-
-
             backgroundFade.colors = intArrayOf(Color.parseColor("#7731B5"), Color.TRANSPARENT)
 
-            binding.btnSearch.setBackgroundColor(Color.parseColor("#2F154A"))
+            circles.forEach {
+                (it.background as GradientDrawable).setStroke(2, Color.parseColor("#4B1F73"))
+            }
+
+            binding.btnSearch.setBackgroundColor(Color.parseColor("#7731B5"))
             binding.btnSearch.setTextColor(Color.WHITE)
         }
     }
 
     //Changes the app GUI when there's an incorrect input or connection issue.
     private fun inputDisplay(active: Boolean){
-        when(active){
-            true -> {
-                binding.cityText.text = "..."
-                binding.humidityText.visibility = View.VISIBLE
-                binding.humidityLabel.visibility = View.VISIBLE
-                binding.windText.visibility = View.VISIBLE
-                binding.windLabel.visibility = View.VISIBLE
-                binding.feelText.visibility = View.VISIBLE
-                binding.feelLabel.visibility = View.VISIBLE
+        if (active) { //For when the data is active for view.
+            binding.cityText.text = "..."
+            binding.humidityText.visibility = View.VISIBLE
+            binding.humidityLabel.visibility = View.VISIBLE
+            binding.windText.visibility = View.VISIBLE
+            binding.windLabel.visibility = View.VISIBLE
+            binding.feelText.visibility = View.VISIBLE
+            binding.feelLabel.visibility = View.VISIBLE
+        }
 
-            }
+        else { //Returns false if the location is non-existent or if there's a caught api fail.
+            binding.cityText.text = "Invalid Location"
+            //binding.weatherText.text = "Location not found or No Connection." //delete later
+            binding.tempText.text = "Please try again!"
+            binding.humidityText.visibility = View.INVISIBLE
+            binding.humidityLabel.visibility = View.INVISIBLE
+            binding.windText.visibility = View.INVISIBLE
+            binding.windLabel.visibility = View.INVISIBLE
+            binding.feelText.visibility = View.INVISIBLE
+            binding.feelLabel.visibility = View.INVISIBLE
 
-            false -> { //Returns false if the location is non-existent or if there's a caught api fail.
-                binding.cityText.text = "Invalid Location"
-                //binding.weatherText.text = "Location not found or No Connection." //delete later
-                binding.tempText.text = "Please try again!"
-                binding.humidityText.visibility = View.INVISIBLE
-                binding.humidityLabel.visibility = View.INVISIBLE
-                binding.windText.visibility = View.INVISIBLE
-                binding.windLabel.visibility = View.INVISIBLE
-                binding.feelText.visibility = View.INVISIBLE
-                binding.feelLabel.visibility = View.INVISIBLE
-
-                //changes image to be unknown
-                val unknowIcon = R.drawable.unknown
-                binding.weatherImageView.setImageResource(unknowIcon)
-            }
+            //changes image to be unknown
+            val unknowIcon = R.drawable.unknown
+            binding.weatherImageView.setImageResource(unknowIcon)
         }
     }
 

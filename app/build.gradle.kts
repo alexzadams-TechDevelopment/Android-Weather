@@ -53,4 +53,7 @@ dependencies {
     //For video element media.
     implementation("androidx.media3:media3-exoplayer:1.8.0")
     implementation("androidx.media3:media3-ui:1.8.0")
+
+    //JSON Parser
+    implementation("com.google.code.gson:gson:2.13.1")
 }

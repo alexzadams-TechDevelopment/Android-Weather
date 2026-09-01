@@ -21,6 +21,7 @@ import android.widget.VideoView
 import java.util.Locale
 import android.net.Uri
 import android.graphics.drawable.GradientDrawable
+import com.google.gson.Gson
 import java.io.IOException
 import java.net.UnknownHostException
 
@@ -45,7 +46,7 @@ class MainActivity : AppCompatActivity() {
             try{
             val result = withContext(Dispatchers.IO) { //Runs a thread for an input/output call for API data.
                 //searches with the URL provided.                                  (readText(Charsets.UTF_8) is used so different text characters are recognised while making this request.
-                URL("https://api.openweathermap.org/data/2.5/weather?q=$location&units=metric&appid=$APIkey").readText(Charsets.UTF_8)
+                URL("https://api.openweathermap.org/data/2.5/weather?q=$location&units=metric&appid=$APIkey").readText(Charsets.UTF_8) //Returns data.
 
             }
                 onPostExecute(result)
@@ -75,37 +76,29 @@ class MainActivity : AppCompatActivity() {
         inputDisplay(true)
 
         try{
-            val jsonObj = JSONObject(result)
-            val main = jsonObj.getJSONObject("main")
-            val weather = jsonObj.getJSONArray("weather").getJSONObject(0)
-            val temp = main.getString("temp")
-            val humidity = main.getString("humidity")
-            val wind = jsonObj.getJSONObject("wind")
-            val icon = weather.getString("icon")
-            val feelLike = main.getDouble("feels_like")
+            val weather = Gson().fromJson(result, WeatherResponse::class.java) //Gson converting JSON data to kotlin object.
 
-
-
+            val temp = weather.main.temp
+            val humidity = weather.main.humidity
+            val icon = weather.weather[0].icon
+            val weatherStatus = weather.weather[0].description
+            val wind = weather.wind.speed
+            val feelLike = weather.main.feels_like
 
             //video TODO:: Edit the videos within the raw file to have reduced quality to run better/smoothly on the android device.
             var weatherMedia = R.raw.sun_cloudy_day //Used to store the weather status from OpenWeather API JSON (Sun_day being a placeholder)
 
-            val weatherStatus = weather.getString("description")
             binding.cityText.text = location //Updates the location name in a suitable time
-
             binding.weatherText.text = weatherStatus
             binding.tempText.text = "$temp °C" //Temperature
-
             binding.feelText.text = "$feelLike °C" //Feels Temperature
-
-            val windString = wind.getString("speed")
-            binding.windText.text = "$windString m/s" //Wind Speed
+            binding.windText.text = "$wind m/s" //Wind Speed
             binding.humidityText.text = "$humidity%" //Humidity
 
             var dayTime = true // To declare if the area searched is day or not using the switch statement below.
 
             //Updates the image on display
-            val weatherIcon = when(icon){ //TODO:: Replace the current images with my own design (current is from open weather AI as a place holder)
+            val weatherIcon = when(icon){
                 //Day
                 "01d" -> {weatherMedia = R.raw.sun_day; R.drawable.d01}
                 "02d" -> {weatherMedia = R.raw.sun_cloudy_day; R.drawable.d02}
@@ -130,26 +123,28 @@ class MainActivity : AppCompatActivity() {
 
                 else -> {R.drawable.unknown; R.raw.sun_cloudy_day}
             }
+            //Activates the video function
+            weatherVideo(weatherMedia)
+
             binding.weatherImageView.setImageResource(weatherIcon)
-
-
-
-            //Play video
-            val video = findViewById<VideoView>(R.id.videoBackground) //Selects the videoView entity in the activity file.
-            video.setVideoURI(Uri.parse("android.resource://$packageName/$weatherMedia")) //uses weatherMedia to select the required weather condition to play the video.
-
-            //To play and loop the video in the background
-            video.setOnPreparedListener {
-                it.isLooping = true
-                video.start()
-            }
-
 
             //To update box colours.
             guiColour(dayTime)
         }
         catch (e: Exception){
             e.printStackTrace() //sort later
+        }
+    }
+
+    private fun weatherVideo(weatherMedia: Int) {
+        //Play video
+        val video = findViewById<VideoView>(R.id.videoBackground) //Selects the videoView entity in the activity file.
+        video.setVideoURI(Uri.parse("android.resource://$packageName/$weatherMedia")) //uses weatherMedia to select the required weather condition to play the video.
+
+        //To play and loop the video in the background
+        video.setOnPreparedListener {
+            it.isLooping = true
+            video.start()
         }
     }
 
@@ -230,7 +225,6 @@ class MainActivity : AppCompatActivity() {
 
         else { //Returns false if the location is non-existent or if there's a caught api fail.
             binding.cityText.text = "Invalid Location"
-            //binding.weatherText.text = "Location not found or No Connection." //delete later
             binding.tempText.text = "Please try again!"
             binding.humidityText.visibility = View.INVISIBLE
             binding.humidityLabel.visibility = View.INVISIBLE
